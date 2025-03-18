@@ -573,6 +573,12 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
       {
         int nElements = tBundleNode->GetNumberOfTransformNodes();
         igtlioTrackingDataConverter::ContentData content = tdataDevice->GetContent();
+        for (int b = 0; b < content.trackingDataElements.size()-1; b++) {
+          if (content.trackingDataElements[b].deviceName.compare(content.trackingDataElements[b + 1].deviceName) == 0)
+          {
+            content.trackingDataElements.erase(b + 1);
+          }
+        }   
         for (auto iter = content.trackingDataElements.begin(); iter != content.trackingDataElements.end(); ++iter)
         {
           bool found(false);
