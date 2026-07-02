@@ -346,6 +346,10 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
     // new node created, notify other class about the creation of new node at the end of this function when all content are assigned to the new node.
     isNewNodeCreated = true;
   }
+  if (modifiedNode)
+  {
+    modifiedNode->SetAttribute("IGTLTimeStamp", std::to_string(modifiedDevice->GetTimestamp()).c_str());
+  }
   if (!modifiedNode)
   {
     // Could not add node.
