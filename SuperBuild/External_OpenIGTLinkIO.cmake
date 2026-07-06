@@ -34,7 +34,7 @@ if(NOT DEFINED OpenIGTLinkIO_DIR AND NOT ${CMAKE_PROJECT_NAME}_USE_SYSTEM_${proj
 
   ExternalProject_SetIfNotDefined(
     ${CMAKE_PROJECT_NAME}_${proj}_GIT_TAG
-    "master"
+    "f144a2e66eb7d4361af91ecee48caf6f80465d48"
     QUIET
     )
 
