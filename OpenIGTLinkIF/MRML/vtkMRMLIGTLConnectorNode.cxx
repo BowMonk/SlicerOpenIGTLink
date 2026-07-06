@@ -577,7 +577,7 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
       {
         int nElements = tBundleNode->GetNumberOfTransformNodes();
         igtlioTrackingDataConverter::ContentData content = tdataDevice->GetContent();
-        for (int b = 0; b < content.trackingDataElements.size()-1; b++) {
+        for (int b = 0; b + 1 < (int)content.trackingDataElements.size(); b++) {
           if (content.trackingDataElements[b].deviceName.compare(content.trackingDataElements[b + 1].deviceName) == 0)
           {
             content.trackingDataElements.erase(b + 1);
@@ -585,13 +585,14 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
         }   
         for (auto iter = content.trackingDataElements.begin(); iter != content.trackingDataElements.end(); ++iter)
         {
+          if (!iter->second.transform) { continue; }  
           bool found(false);
           vtkSmartPointer<vtkMatrix4x4> mat = vtkSmartPointer<vtkMatrix4x4>::New();
 
           for (int i = 0; i < nElements; i++)
           {
             vtkMRMLLinearTransformNode* transformNode = tBundleNode->GetTransformNode(i);
-            if (iter->second.deviceName.compare(transformNode->GetName()) == 0)
+            if (transformNode && iter->second.deviceName.compare(transformNode->GetName()) == 0)
             {
               // already exists, update transform
               found = true;
