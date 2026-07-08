@@ -346,10 +346,6 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
     // new node created, notify other class about the creation of new node at the end of this function when all content are assigned to the new node.
     isNewNodeCreated = true;
   }
-  if (modifiedNode)
-  {
-    modifiedNode->SetAttribute("IGTLTimeStamp", std::to_string(modifiedDevice->GetTimestamp()).c_str());
-  }
   if (!modifiedNode)
   {
     // Could not add node.
@@ -575,6 +571,8 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
       vtkMRMLIGTLTrackingDataBundleNode* tBundleNode = vtkMRMLIGTLTrackingDataBundleNode::SafeDownCast(modifiedNode);
       if (tBundleNode)
       {
+        std::string tsStr = std::to_string(tdataDevice->GetHeader().timestamp);
+        
         int nElements = tBundleNode->GetNumberOfTransformNodes();
         igtlioTrackingDataConverter::ContentData content = tdataDevice->GetContent();
         for (int b = 0; b + 1 < (int)content.trackingDataElements.size(); b++) {
@@ -595,6 +593,7 @@ void vtkMRMLIGTLConnectorNode::ProcessIncomingDeviceModifiedEvent(
             if (transformNode && iter->second.deviceName.compare(transformNode->GetName()) == 0)
             {
               // already exists, update transform
+              transformNode->SetAttribute("IGTLTimeStamp", tsStr.c_str());
               found = true;
               mat->DeepCopy(iter->second.transform);
               transformNode->SetMatrixTransformToParent(mat.GetPointer());
