@@ -910,7 +910,8 @@ void vtkSlicerPlusRemoteLogic::UpdateTransform(vtkMRMLPlusRemoteNode * parameter
   }
 
   // Get transform matrix as string
-  vtkMatrix4x4* transformMatrix = transformNode->GetMatrixTransformToParent();
+  vtkNew<vtkMatrix4x4> transformMatrix;
+  transformNode->GetMatrixTransformToParent(transformMatrix);
 
   std::stringstream transformSS;
 
